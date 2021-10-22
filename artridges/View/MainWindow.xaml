@@ -17,9 +17,18 @@
             <MenuItem Header="Export"/>
         </Menu>
 
-        <view:Digest Grid.Row="1" Visibility="Visible"/>
-        <view:Delivery Grid.Row="1" Visibility="Hidden"/>
-        <view:Order Grid.Row="1" Visibility="Hidden"/>
-        <view:Purchase Grid.Row="1" Visibility="Hidden"/>
+        <Grid Grid.Row="1" Visibility="{Binding GoDeliveryV.Visibility}">
+            <view:Delivery/>
+        </Grid>
+        <Grid Grid.Row="1" Visibility="{Binding GoOrderV.Visibility}">
+            <view:Order/>
+        </Grid>
+        <Grid Grid.Row="1" Visibility="{Binding GoPurchaseV.Visibility}">
+            <view:Purchase/>
+        </Grid>
+        <Grid Grid.Row="1" Visibility="{Binding GoDigestV.Visibility}">
+            <view:Digest/>
+        </Grid>
+
     </Grid>
 </Window>

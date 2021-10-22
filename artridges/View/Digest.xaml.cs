@@ -15,6 +15,7 @@ using LiveCharts.Wpf;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf.Points;
+using Сartridges_storage.ViewModel;
 
 namespace Сartridges_storage.View
 {
@@ -26,25 +27,6 @@ namespace Сartridges_storage.View
         public Digest()
         {
             InitializeComponent();
-
-            SeriesCollection = new SeriesCollection();
-
-            SeriesCollection.Add(new PieSeries()
-            {
-                Title = t,
-                Values = new ChartValues<ObservableValue> { new ObservableValue(a) },
-                DataLabels = true
-            }); ;
-
-            DataContext = this;
         }
-
-
-        int a = 54;
-        string t = "HP";
-
-
-        public SeriesCollection SeriesCollection { get; set; }
-
     }
 }
