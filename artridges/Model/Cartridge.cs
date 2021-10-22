@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Сartridges_storage.Model
+﻿namespace Сartridges_storage.Model
 {
     class Cartridge
     {

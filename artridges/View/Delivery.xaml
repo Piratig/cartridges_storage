@@ -15,9 +15,36 @@
             <ColumnDefinition Width="2*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+
+        <ListView Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+                  Margin="5,5,5,5">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header=" " Width="20">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Cartridge"/>
+                    <GridViewColumn Header="Color"/>
+                    <GridViewColumn Header="Quantity"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Grid.Column="1" Grid.Row="0" Margin="5,5,5,5">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Cartridge"/>
+                    <GridViewColumn Header="Warehouse"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
         
-        <ListView Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5,5,5,5"/>
-        <ListView Grid.Column="1" Grid.Row="0" Margin="5,5,5,5"/>
-        <Button Grid.Column="1" Grid.Row="1" Margin="5,5,5,5"/>
+        <Button Content="Order from warehouse" 
+                Grid.Column="1" Grid.Row="1" 
+                Margin="5,5,5,5" Height="Auto" Width="Auto"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>

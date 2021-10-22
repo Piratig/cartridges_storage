@@ -23,6 +23,60 @@ namespace Сartridges_storage.ViewModel
 {
     public class DataManageVM : INotifyPropertyChanged
     {
+        #region Declaration
+        public SeriesCollection SeriesCollection { get; set; }
+
+        Grid goDelivery = new Grid();
+        Grid goDigest = new Grid();
+        Grid goOrder = new Grid();
+        Grid goPurchase = new Grid();
+
+        private Grid goDigestV;
+        private Grid goDeliveryV;
+        private Grid goOrderV;
+        private Grid goPurchaseV;
+
+        public Grid GoDigestV
+        {
+            get { return goDigestV; }
+            set
+            {
+                goDigestV = value;
+                NotifyPropertyChanged("GoDigestV");
+            }
+        }
+        public Grid GoDeliveryV
+        {
+            get { return goDeliveryV; }
+            set
+            {
+                goDeliveryV = value;
+                NotifyPropertyChanged("GoDeliveryV");
+            }
+        }
+        public Grid GoOrderV
+        {
+            get { return goOrderV; }
+            set
+            {
+                goOrderV = value;
+                NotifyPropertyChanged("GoOrderV");
+            }
+        }
+        public Grid GoPurchaseV
+        {
+            get { return goPurchaseV; }
+            set
+            {
+                goPurchaseV = value;
+                NotifyPropertyChanged("GoPurchaseV");
+            }
+        }
+
+        #endregion
+
+        #region Load
+        // Load command
         private RelayCommand loadedCommand;
         public RelayCommand LoadedCommand
         {
@@ -30,26 +84,13 @@ namespace Сartridges_storage.ViewModel
             {
                 return loadedCommand ?? new RelayCommand(obj =>
                 {
+                    OpenDigestWidgetMethod();
                     PieFiller();
                 });
             }
         }
 
-        public SeriesCollection SeriesCollection { get; set; }
-
-        public void PieFiller()
-        {
-            SeriesCollection = new SeriesCollection();
-
-            SeriesCollection.Add(new PieSeries()
-            {
-                Title = "HP",
-                Values = new ChartValues<ObservableValue> { new ObservableValue(25) },
-                DataLabels = true
-            });
-            NotifyPropertyChanged("SeriesCollection");
-            
-        }
+        #endregion
 
         #region COMMANDS TO CHANGE WIDGET
 
@@ -100,55 +141,19 @@ namespace Сartridges_storage.ViewModel
         #endregion
 
         #region MATHODS
-        Grid goDelivery = new Grid();
-        Grid goDigest = new Grid();
-        Grid goOrder = new Grid();
-        Grid goPurchase = new Grid();
-
-        private Grid goDigestV;
-        private Grid goDeliveryV;
-        private Grid goOrderV;
-        private Grid goPurchaseV;
-
-        public Grid GoDigestV
+        public void PieFiller()
         {
-            get { return goDigestV; }
-            set
-            {
-                goDigestV = value;
-                NotifyPropertyChanged("GoDigestV");
-            }
-        }
-        public Grid GoDeliveryV
-        {
-            get { return goDeliveryV; }
-            set
-            {
-                goDeliveryV = value;
-                NotifyPropertyChanged("GoDeliveryV");
-            }
-        }
+            SeriesCollection = new SeriesCollection();
 
-        public Grid GoOrderV
-        {
-            get { return goOrderV; }
-            set
+            SeriesCollection.Add(new PieSeries()
             {
-                goOrderV = value;
-                NotifyPropertyChanged("GoOrderV");
-            }
-        }
-        public Grid GoPurchaseV
-        {
-            get { return goPurchaseV; }
-            set
-            {
-                goPurchaseV = value;
-                NotifyPropertyChanged("GoPurchaseV");
-            }
-        }
+                Title = "HP",
+                Values = new ChartValues<ObservableValue> { new ObservableValue(25) },
+                DataLabels = true
+            });
+            NotifyPropertyChanged("SeriesCollection");
 
-
+        }
         private void OpenDigestWidgetMethod()
         {
             goDigest.Visibility = Visibility.Visible;
