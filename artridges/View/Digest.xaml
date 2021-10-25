@@ -31,8 +31,24 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
-        <DataGrid Margin="5,5,5,5" Grid.RowSpan="6"/>
+
+        <ListView ItemsSource="{Binding CartridgesList}" 
+                  Margin="5,5,5,5" Grid.RowSpan="6">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Cartridge name"
+                                    DisplayMemberBinding="{Binding Path=Title}"/>
+                    <GridViewColumn Header="For printer"
+                                    DisplayMemberBinding="{Binding Path=Printer}"/>
+                    <GridViewColumn Header="Color"
+                                    DisplayMemberBinding="{Binding Path=CartridgeColor}"/>
+                    <GridViewColumn Header="In storage"
+                                    DisplayMemberBinding="{Binding Path=StorageNum}"/>
+                    <GridViewColumn Header="In warehouse"
+                                    DisplayMemberBinding="{Binding Path=WarehouseNume}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
         <Button Content="Delivery" 
                 Command="{Binding OpenDeliveryWidget}" 
@@ -54,10 +70,12 @@
                 Margin="5,5,5,5" Width="Auto" Height="Auto" 
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <ProgressBar Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="3" 
+        <ProgressBar Minimum="0" Maximum="{Binding StorageMax}" Value="{Binding StorageValue}"
+                     Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="3" 
                      Margin="5,5,5,5" Width="Auto" Height="Auto" 
                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <ProgressBar Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" 
+        <ProgressBar Minimum="0" Maximum="{Binding WarehouseMax}" Value="{Binding WarehouseValue}"
+                     Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" 
                      Margin="5,5,5,5" Width="Auto" Height="Auto" 
                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         

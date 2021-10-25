@@ -34,14 +34,19 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" 
+        <ListView ItemsSource="{Binding InventaryCheck}" 
+                  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" 
                   Margin="5,5,5,5">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Cartridge"/>
-                    <GridViewColumn Header="Color"/>
-                    <GridViewColumn Header="Quantity"/>
-                    <GridViewColumn Header="Date"/>
+                    <GridViewColumn Header="Order number" 
+                                    DisplayMemberBinding="{Binding Path=OrderId}"/>
+                    <GridViewColumn Header="Cartridge" 
+                                    DisplayMemberBinding="{Binding Path=CartridgeName}"/>
+                    <GridViewColumn Header="Quantity" 
+                                    DisplayMemberBinding="{Binding Path=Quantity}"/>
+                    <GridViewColumn Header="Date" 
+                                    DisplayMemberBinding="{Binding Path=TransactionDate}"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -58,13 +63,18 @@
         <Label Content="Cartridge" 
                Grid.Column="0" Grid.Row="3" 
                HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        
-        <TextBox Grid.Column="0" Grid.Row="0" Margin="150,5,5,5"/>
-        <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+
+        <TextBox Text="{Binding InvCheck}" 
+                 Grid.Column="0" Grid.Row="0" Margin="150,5,5,5"/>
+        <TextBox Grid.Column="0" Grid.Row="1"
                  Margin="150,5,5,5"/>
         <TextBox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
                  Margin="150,5,5,5"/>
-        <ComboBox Grid.Column="0" Grid.Row="3" Margin="150,5,5,5"/>
+        
+        <ComboBox ItemsSource="{Binding CartridgesByInvList}"
+                  DisplayMemberPath="Title"
+                  SelectedItem="{Binding CartringeByInv}"
+                  Grid.Column="0" Grid.Row="3" Margin="150,5,5,5"/>
 
         <Button Content="Order" 
                 Grid.Column="2" Grid.Row="5" 
@@ -75,7 +85,12 @@
                 Margin="5,5,5,5" Height="Auto" Width="Auto"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button Content="Check" 
+                Command="{Binding InventaryCheckCommand}" 
                 Grid.Column="1" Grid.Row="0" 
+                Margin="5,5,5,5" Height="Auto" Width="Auto"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Button Content="Search" 
+                Grid.Column="1" Grid.Row="1" 
                 Margin="5,5,5,5" Height="Auto" Width="Auto"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button Content="Add" 

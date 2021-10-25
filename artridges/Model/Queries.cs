@@ -20,43 +20,40 @@ using System.Windows.Shapes;
 
 namespace Сartridges_storage.Model
 {
+    public class Queries
+    {
+        private const string connectionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\Igor\Downloads\skillfactory_rds\-artridges_storage\artridges\Cartridge.mdf; Integrated Security = True";
 
-    public static class Queries
-    {       
-        // Main querie
-        private static void List_output()
+        // Digest querie 
+        internal static List<Cartridge> List_output()
         {
-
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             List<Cartridge> cartridgesList = new List<Cartridge>();
 
-            String sql = "SELECT c_name, " +
-                "(SELECT CONCAT(p_compony, ' ', p_name) FROM Printers " +
-                "WHERE Printers.printer_Id = Cartridges.for_printer) AS Printer" +
-                "c_color, " +
-                "storage_num, " +
-                "warehouse_num " +
-                "FROM Cartridges";
+            String sql = "SELECT Cartridges.c_name, " +
+                "CONCAT(Printers.p_compony, ' ', Printers.p_name), " +
+                "Cartridges.c_color, " +
+                "Cartridges.storage_num, " +
+                "Cartridges.warehouse_num " +
+                "FROM Cartridges JOIN Printers ON Cartridges.for_printer=Printers.printer_Id ";
 
             SqlConnection connection = null;
+            SqlDataReader reader = null;
             try
             {
                 connection = new SqlConnection(connectionString);
                 SqlCommand command = new SqlCommand(sql, connection);
-
                 connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
+                reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
                     cartridgesList.Add(new Cartridge()
                     {
-                        Title = reader.GetString(4),
-                        Printer = reader.GetString(4),
-                        C_color = reader.GetString(4),
-                        Storage_num = reader.GetInt32(0),
-                        Warehouse_nume = reader.GetInt32(0)
+                        Title = reader.GetString(0),
+                        Printer = reader.GetString(1),
+                        CartridgeColor = reader.GetString(2),
+                        StorageNum = reader.GetInt32(3),
+                        WarehouseNume = reader.GetInt32(4)
                     });
                 }
             }
@@ -69,8 +66,202 @@ namespace Сartridges_storage.Model
                 if (connection != null)
                     connection.Close();
             }
+            return cartridgesList;
         }
 
-        // 
+        // Inventory number check
+        internal static List<Transaction> PrintersInventoryNumberCheck(int p_i)
+        {
+            List<Transaction> transaction = new List<Transaction>();
+            String sql = String.Format( "SELECT order_num, " +
+                "(SELECT CONCAT(c_name, '/', c_color) FROM Cartridges " +
+                "WHERE Transactions.cartridge_id = Cartridges.cartridge_ID), " +
+                "quantity, date " +
+                "FROM Transactions " +
+                "WHERE printer_inventory = '{0}'", p_i);
+
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                SqlCommand command = new SqlCommand(sql, connection);
+
+                connection.Open();
+
+                reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    transaction.Add(new Transaction()
+                    {
+                        OrderId = reader.GetInt32(0),
+                        CartridgeName = reader.GetString(1),
+                        Quantity = reader.GetInt32(2),
+                        TransactionDate = reader.GetDateTime(3),
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+
+            return transaction;
+        }
+
+        // Cartriges by inventory number check
+        internal static List<Cartridge> CartridgesByInventoryNumberCheck(int p_i)
+        {
+            List<Cartridge> CartridgesList = new List<Cartridge>();
+            String sql = String.Format("SELECT c_name " +
+                "FROM Cartridges " +
+                "WHERE for_printer = (SELECT printer_Id " +
+                "FROM Printers WHERE inventory_number = {0})", p_i);
+
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                SqlCommand command = new SqlCommand(sql, connection);
+
+                connection.Open();
+
+                reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    CartridgesList.Add(new Cartridge()
+                    {
+                        Title = reader.GetString(0)
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+            return CartridgesList;
+        }
+
+        // Pie filling
+        internal static List<ForPie> PrintersForPie()
+        {
+            List<ForPie> p_com = new List<ForPie>();
+
+            String sql = "SELECT p_compony, " +
+                "COUNT(*) AS p_q " +
+                "FROM Printers " +
+                "GROUP BY p_compony";
+
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                SqlCommand command = new SqlCommand(sql, connection);
+
+                connection.Open();
+
+                reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    p_com.Add(new ForPie()
+                    {
+                        PrinterName = reader.GetString(0),
+                        PrinterNum = reader.GetInt32(1)
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+            return p_com;
+        }
+
+        // Storage value
+        internal static int StorageValue()
+        {
+            int a = 0;
+            String sql = "SELECT SUM(storage_num) " +
+                         "FROM Cartridges ";
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                SqlCommand command = new SqlCommand(sql, connection);
+
+                connection.Open();
+
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    a = reader.GetInt32(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+            return a;
+        }
+
+        // Warehouse value
+        internal static int WarehouseValue()
+        {
+            int a = 0;
+            String sql = "SELECT SUM(warehouse_num) " +
+                         "FROM Cartridges ";
+            SqlConnection connection = null;
+            SqlDataReader reader = null;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                SqlCommand command = new SqlCommand(sql, connection);
+
+                connection.Open();
+
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    a = reader.GetInt32(0);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                    connection.Close();
+            }
+            return a;
+        }
+
     }
 }

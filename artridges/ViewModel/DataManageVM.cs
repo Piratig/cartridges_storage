@@ -24,6 +24,38 @@ namespace Сartridges_storage.ViewModel
     public class DataManageVM : INotifyPropertyChanged
     {
         #region Declaration
+
+        List<ForPie> p_com = new List<ForPie>();
+        private List<Cartridge> cartridgesByInvList = new List<Cartridge>();
+        private List<Cartridge> cartridgesList = new List<Cartridge>();
+        private List<Transaction> inventaryCheck = new List<Transaction>();
+        public List<Cartridge> CartridgesByInvList
+        {
+            get { return cartridgesByInvList; }
+            set
+            {
+                cartridgesByInvList = value;
+                NotifyPropertyChanged("CartridgesByInvList");
+            }
+        }
+        public List<Cartridge> CartridgesList
+        {
+            get { return cartridgesList; }
+            set
+            {
+                cartridgesList = value;
+                NotifyPropertyChanged("CartridgesList");
+            }
+        }
+        public List<Transaction> InventaryCheck
+        {
+            get { return inventaryCheck; }
+            set
+            {
+                inventaryCheck = value;
+                NotifyPropertyChanged("InventaryCheck");
+            }
+        }
         public SeriesCollection SeriesCollection { get; set; }
 
         Grid goDelivery = new Grid();
@@ -35,6 +67,12 @@ namespace Сartridges_storage.ViewModel
         private Grid goDeliveryV;
         private Grid goOrderV;
         private Grid goPurchaseV;
+        private int warehouseMax;
+        private int warehouseValue;
+        private int storageMax;
+        private int storageValue;
+        private int invCheck;
+        private string cartringeByInv;
 
         public Grid GoDigestV
         {
@@ -72,8 +110,75 @@ namespace Сartridges_storage.ViewModel
                 NotifyPropertyChanged("GoPurchaseV");
             }
         }
+        public int InvCheck
+        {
+            get { return invCheck; }
+            set
+            {
+                invCheck = value;
+                NotifyPropertyChanged("InvCheck");
+            }
+        }
+        public int WarehouseMax
+        {
+            get { return warehouseMax; }
+            set
+            {
+                warehouseMax = value;
+                NotifyPropertyChanged("WarehouseMax");
+            }
+        }
+        public int WarehouseValue
+        {
+            get { return warehouseValue; }
+            set
+            {
+                warehouseValue = value;
+                NotifyPropertyChanged("WarehouseValue");
+            }
+        }
+        public int StorageMax
+        {
+            get { return storageMax; }
+            set
+            {
+                storageMax = value;
+                NotifyPropertyChanged("StorageMax");
+            }
+        }
+        public int StorageValue
+        {
+            get { return storageValue; }
+            set
+            {
+                storageValue = value;
+                NotifyPropertyChanged("StorageValue");
+            }
+        }
+        public string CartringeByInv
+        {
+            get { return cartringeByInv; }
+            set
+            {
+                cartringeByInv = value;
+                NotifyPropertyChanged("CartringeByInv");
+            }
+        }
 
         #endregion
+
+        private RelayCommand inventaryCheckCommand;
+        public RelayCommand InventaryCheckCommand
+        {
+            get
+            {
+                return inventaryCheckCommand ?? new RelayCommand(obj =>
+                {
+                    InventoryCheckMethod();
+                });
+            }
+        }
+
 
         #region Load
         // Load command
@@ -86,6 +191,7 @@ namespace Сartridges_storage.ViewModel
                 {
                     OpenDigestWidgetMethod();
                     PieFiller();
+                    DigestCartridgeList();
                 });
             }
         }
@@ -141,19 +247,41 @@ namespace Сartridges_storage.ViewModel
         #endregion
 
         #region MATHODS
+        public void DigestCartridgeList()
+        {
+            CartridgesList = Queries.List_output();
+        }
+
         public void PieFiller()
         {
+            p_com = Queries.PrintersForPie();
             SeriesCollection = new SeriesCollection();
 
-            SeriesCollection.Add(new PieSeries()
+            foreach (ForPie i in p_com)
             {
-                Title = "HP",
-                Values = new ChartValues<ObservableValue> { new ObservableValue(25) },
-                DataLabels = true
-            });
+                SeriesCollection.Add(new PieSeries()
+                {
+                    Title = i.PrinterName,
+                    Values = new ChartValues<ObservableValue> { new ObservableValue(i.PrinterNum) },
+                    DataLabels = true
+                });
+            }
             NotifyPropertyChanged("SeriesCollection");
-
+            StorageValue = Queries.StorageValue();
+            WarehouseValue = Queries.WarehouseValue();
+            StorageMax = 500;
+            WarehouseMax = 1000;
         }
+
+        public void InventoryCheckMethod()
+        {
+            InventaryCheck = Queries.PrintersInventoryNumberCheck(InvCheck);
+            if (InvCheck > 0)
+            {
+                CartridgesByInvList = Queries.CartridgesByInventoryNumberCheck(InvCheck);
+            }
+        }
+
         private void OpenDigestWidgetMethod()
         {
             goDigest.Visibility = Visibility.Visible;
