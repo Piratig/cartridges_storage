@@ -252,6 +252,7 @@ namespace Сartridges_storage.ViewModel
             CartridgesList = Queries.List_output();
         }
 
+        // Mathod for pie graph
         public void PieFiller()
         {
             p_com = Queries.PrintersForPie();
@@ -273,6 +274,7 @@ namespace Сartridges_storage.ViewModel
             WarehouseMax = 1000;
         }
 
+        // Mathod shows all cartridges issued to the printer by inventory number
         public void InventoryCheckMethod()
         {
             InventaryCheck = Queries.PrintersInventoryNumberCheck(InvCheck);
@@ -282,6 +284,7 @@ namespace Сartridges_storage.ViewModel
             }
         }
 
+        // Show Digest widget
         private void OpenDigestWidgetMethod()
         {
             goDigest.Visibility = Visibility.Visible;
@@ -293,6 +296,7 @@ namespace Сartridges_storage.ViewModel
             GoOrderV = goOrder;
             GoPurchaseV = goPurchase;
         }
+        // Show Delivery widget
         private void OpenDeliveryWidgetMethod()
         {
             goDigest.Visibility = Visibility.Hidden;
@@ -304,6 +308,7 @@ namespace Сartridges_storage.ViewModel
             GoOrderV = goOrder;
             GoPurchaseV = goPurchase;
         }
+        // Show Order widget
         private void OpenOrderWidgetMethod()
         {
             goDigest.Visibility = Visibility.Hidden;
@@ -315,6 +320,7 @@ namespace Сartridges_storage.ViewModel
             GoOrderV = goOrder;
             GoPurchaseV = goPurchase;
         }
+        // Show Purchase widget
         private void OpenPurchaseWidgetMethod()
         {
             goDigest.Visibility = Visibility.Hidden;

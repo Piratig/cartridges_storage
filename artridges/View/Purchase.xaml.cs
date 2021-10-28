@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 namespace Сartridges_storage.View
 {
     /// <summary>
-    /// Логика взаимодействия для Purchase.xaml
+    /// Widget for ordering the purchase of cartridges at a warehouse
     /// </summary>
     public partial class Purchase : UserControl
     {
